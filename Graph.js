@@ -31,6 +31,65 @@ function Graph() {
     }
     return s;
   }
+
+  //------------ 广度优先搜索(Breadth-First Search, BFS) ----------
+  var initializeColor = function() {
+    var color = [];
+    for (var i = 0; i < vertices.length; i++) {
+      color[vertices[i]] = 'white'; // {1}
+    }
+    return color;
+  }
+
+  // var Queue = function() {
+
+  // }
+  function Queue() {
+    let items = []
+    this.enqueue = function (element) {
+      items.push(element)
+    }
+    this.dequeue = function () {
+      return items.shift()
+    }
+    this.front = function () {
+      return items[0]
+    }
+    this.isEmpty = function () {
+      return items.length == 0
+    }
+    this.size = function () {
+      return items.length
+    }
+    this.print = function () {
+      console.log(items.toString())
+    }
+  }
+
+  this.bfs = function(v, callback) {
+    var color = initializeColor(), // {2}
+    queue = new Queue(); // {3}
+    queue.enqueue(v); // {4}
+
+    while (!queue.isEmpty()) { // {5}
+      var u = queue.dequeue(), // {6}
+      neighbors = adjList.get(u); // {7}
+      color[u] = 'grey'; // {8}
+      for (var i = 0; i < neighbors.length; i++) { // {9}
+        var w = neighbors[i]; // {10}
+        if (color[w] === 'white') { // {11}
+          color[w] = 'grey'; // {12}
+          queue.enqueue(w); // {13}
+        }
+      }
+      color[u] = 'black'; // {14}
+      if (callback) { // {15}
+        callback(u);
+      }
+    }
+  }
+
+  //------------ BFS End ----------
 }
 
 /**
@@ -104,3 +163,9 @@ graph.addEdge('B', 'F');
 graph.addEdge('E', 'I');
 
 console.log(graph.toString());
+
+function printNode(value) { // {16}
+  console.log('Visited vertex: ' + value); // {17}
+}
+
+graph.bfs(myVertices[0], printNode); // {18}
