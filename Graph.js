@@ -41,9 +41,6 @@ function Graph() {
     return color;
   }
 
-  // var Queue = function() {
-
-  // }
   function Queue() {
     let items = []
     this.enqueue = function (element) {
@@ -66,30 +63,68 @@ function Graph() {
     }
   }
 
-  this.bfs = function(v, callback) {
-    var color = initializeColor(), // {2}
-    queue = new Queue(); // {3}
-    queue.enqueue(v); // {4}
+  // this.bfs = function(v, callback) {
+  //   var color = initializeColor(), // {2}
+  //   queue = new Queue(); // {3}
+  //   queue.enqueue(v); // {4}
 
-    while (!queue.isEmpty()) { // {5}
-      var u = queue.dequeue(), // {6}
-      neighbors = adjList.get(u); // {7}
-      color[u] = 'grey'; // {8}
-      for (var i = 0; i < neighbors.length; i++) { // {9}
-        var w = neighbors[i]; // {10}
-        if (color[w] === 'white') { // {11}
-          color[w] = 'grey'; // {12}
-          queue.enqueue(w); // {13}
+  //   while (!queue.isEmpty()) { // {5}
+  //     var u = queue.dequeue(), // {6}
+  //     neighbors = adjList.get(u); // {7}
+  //     color[u] = 'grey'; // {8}
+  //     for (var i = 0; i < neighbors.length; i++) { // {9}
+  //       var w = neighbors[i]; // {10}
+  //       if (color[w] === 'white') { // {11}
+  //         color[w] = 'grey'; // {12}
+  //         queue.enqueue(w); // {13}
+  //       }
+  //     }
+  //     color[u] = 'black'; // {14}
+  //     if (callback) { // {15}
+  //       callback(u);
+  //     }
+  //   }
+  // }
+
+  /**
+   * 使用BFS寻找最短路径
+   * @param {*} v 
+   */
+  this.BFS = function(v) {
+    var color = initializeColor(),
+    queue = new Queue(),
+    d = [], // {1}
+    pred = []; // {2}
+    queue.enqueue(v);
+
+    for (var i = 0; i < vertices.length; i++) { // {3}
+      d[vertices[i]] = 0; // {4}
+      pred[vertices[i]] = null; // {5}
+    }
+
+    while(!queue.isEmpty()) {
+      var u = queue.dequeue(),
+      neighbors = adjList.get(u);
+      color[u] = 'grey';
+      for (i = 0; i < neighbors.length; i++) {
+        var w = neighbors[i];
+        if (color[w] === 'white') {
+          color[w] = 'grey';
+          d[w] = d[u] + 1; // {6}
+          pred[w] = u; // {7}
+          queue.enqueue(w);
         }
       }
-      color[u] = 'black'; // {14}
-      if (callback) { // {15}
-        callback(u);
-      }
+      color[u] = 'black';
+    }
+    return { // {8}
+      distances: d,
+      predecessors: pred
     }
   }
-
   //------------ BFS End ----------
+
+
 }
 
 /**
@@ -168,4 +203,7 @@ function printNode(value) { // {16}
   console.log('Visited vertex: ' + value); // {17}
 }
 
-graph.bfs(myVertices[0], printNode); // {18}
+// graph.bfs(myVertices[0], printNode); // {18}
+
+var shortestPathA = graph.BFS(myVertices[0]);
+console.log(shortestPathA);
