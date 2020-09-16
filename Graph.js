@@ -207,3 +207,53 @@ function printNode(value) { // {16}
 
 var shortestPathA = graph.BFS(myVertices[0]);
 console.log(shortestPathA);
+
+
+function Stack() {
+  let items = [];
+  
+  this.push = function(element) {
+    items.push(element);
+  }
+
+  this.pop = function () {
+    return items.pop();
+  }
+
+  this.peek = function () {
+    return items[items.length - 1];
+  }
+
+  this.isEmpty = function () {
+    return items.length == 0;
+  }
+
+  this.size = function () {
+    return items.length;
+  }
+
+  this.clear = function () {
+    items = [];
+  }
+
+  this.print = function () {
+    console.log(items);
+    // console.log(items.toString());
+  }
+}
+
+// 通过前溯点数组，构建顶点A到其他顶点的路径
+var fromVertex = myVertices[0]; // {9}
+for (var i = 1; i < myVertices.length; i++) { // {10}
+  var toVertex = myVertices[i], // {11}
+  path = new Stack(); // {12}
+  for (var v = toVertex; v !== fromVertex; v = shortestPathA.predecessors[v]) { // {13}
+    path.push(v); // {14}
+  }
+  path.push(fromVertex); // {15}
+  var s = path.pop(); // {16}
+  while(!path.isEmpty()) { // {17}
+    s += ' - ' + path.pop(); // {18}
+  }
+  console.log(s); // {19}
+}
