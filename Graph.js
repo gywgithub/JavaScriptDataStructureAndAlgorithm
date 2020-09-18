@@ -124,7 +124,76 @@ function Graph() {
   }
   //------------ BFS End ----------
 
+  /**
+   * 深度优先算法
+   * @param {*} callback 
+   */
+  this.dfs = function(callback) {
+    var color = initializeColor(); // {1}
+    for (var i = 0; i < vertices.length; i++) { // {2}
+      if (color[vertices[i]] === 'white') { // {3}
+        dfsVisit(vertices[i], color, callback); // {4}
+      }
+    }
+  }
 
+  var dfsVisit = function(u, color, callback) {
+    color[u] = 'grey'; // {5}
+    if (callback) { // {6}
+      callback(u)
+    }
+    var neighbors = adjList.get(u); // {7}
+    for (var i = 0; i < neighbors.length; i++) { // {8}
+      var w = neighbors[i]; // {9}
+      if (color[w] === 'white') { // {10}
+        dfsVisit(w, color, callback); // {11}
+      }
+    }
+    color[u] = 'black'; // {12}
+  }
+
+  // 改进 DFS 方法
+  var time = 0; // {1}
+  this.DFS = function() {
+    var color = initializeColor(), // {2}
+    d = [],
+    f = [],
+    p = [];
+    time = 0;
+
+    for (var i = 0; i < vertices.length; i++) { // {3}
+      f[vertices[i]] = 0;
+      d[vertices[i]] = 0;
+      p[vertices[i]] = null;
+    }
+    for (var i = 0; i < vertices.length; i++) {
+      if (color[vertices[i]] === 'white') {
+        DFSVisit(vertices[i], color, d, f, p)
+      }
+    }
+    return {
+      discovery: d,
+      finished: f,
+      predecessors: p
+    }
+  }
+
+  var DFSVisit = function(u, color, d, f, p) {
+    console.log('discovered ' + u)
+    color[u] = 'grey';
+    d[u] = ++time; // {5}
+    var neighbors = adjList.get(u);
+    for (var i = 0; i < neighbors.length; i++) {
+      var w = neighbors[i];
+      if (color[w] === 'white') {
+        p[w] = u; // {6}
+        DFSVisit(w, color, d, f, p);
+      }
+    }
+    color[u] = 'black';
+    f[u] = ++time; // {7}
+    console.log('explored ' + u);
+  }
 }
 
 /**
@@ -257,3 +326,25 @@ for (var i = 1; i < myVertices.length; i++) { // {10}
   }
   console.log(s); // {19}
 }
+
+// 测试 dfs 方法
+graph.dfs(printNode)
+
+// 测试改进的 DFS 方法
+graph.DFS();
+
+console.log('----------------------------------')
+
+let graph2 = new Graph();
+myVertices2 = ['A', 'B', 'C', 'D', 'E', 'F'];
+for (var i = 0; i < myVertices2.length; i++) {
+  graph2.addVertex(myVertices2[i]);
+}
+graph2.addEdge('A', 'C');
+graph2.addEdge('A', 'D');
+graph2.addEdge('B', 'D');
+graph2.addEdge('B', 'E');
+graph2.addEdge('C', 'F');
+graph2.addEdge('F', 'E');
+var result2 = graph2.DFS();
+console.log('result2 ', result2);
