@@ -194,6 +194,53 @@ function Graph() {
     f[u] = ++time; // {7}
     console.log('explored ' + u);
   }
+
+  // 最小生成树（MST）问题是网络设计中常见的问题
+
+  /**
+   * Prim 算法是一种求解加权无向连通图的MST问题的贪心算法。
+   */
+  this.prim = function() {
+    var parent = [],
+      key = [],
+      visited = [],
+      length = this.graph.length,
+      i;
+    
+    for (i = 0; i < length; i++) { // {1}
+      key[i] = INF;
+      visited[i] = false;
+    }
+
+    key[0] = 0; // {2}
+    parent[0] = -1;
+
+    for (i = 0; i < length - 1; i++) { // {3}
+      var u = minKey(key, visited); // {4}
+      visited[u] = true; // {5}
+
+      for (var v = 0; v < length; v++) {
+        if (this.graph[u][v] && visited[v] == false
+        && this.graph[u][v] < key[v]) { // {6}
+          parent[v] = u; // {7}
+          key[v] = this.graph[u][v]; // {8}
+        }
+      }
+    }
+    return parent; // {9}
+  }
+
+  // 选出 key 值最小的顶点
+  var minKey = function(dist, visited) {
+    var min = INF, minIndex = -1;
+    for (var v = 0; v < dist.length; v++) {
+      if (visited[v] == false && dist[v] <= min) {
+        min = dist[v];
+        minIndex = v;
+      }
+    }
+    return minIndex;
+  }
 }
 
 /**
@@ -348,3 +395,4 @@ graph2.addEdge('C', 'F');
 graph2.addEdge('F', 'E');
 var result2 = graph2.DFS();
 console.log('result2 ', result2);
+
