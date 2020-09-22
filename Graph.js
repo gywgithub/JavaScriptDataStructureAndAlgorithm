@@ -241,6 +241,58 @@ function Graph() {
     }
     return minIndex;
   }
+
+  /**
+   * Kruskal 算法也是一种加权无向连通图的MST的贪心算法
+   */
+  this.kruskal = function () {
+    var length = this.graph.length,
+    parent = [], cost,
+    ne = 0, a, b, u, v, i, j, min;
+    cost = initializeCost(); // {1}
+
+    while (ne < length - 1) { // {2}
+      for (i = 0, min = INF; i < length; i++) { // {3}
+        for (j = 0; j < length; j++) {
+          if (cost[i][j] < min) {
+            min = cost[i][j];
+            u = i;
+            v = j;
+          }
+        }
+      }
+
+      u = find(u, parent); // {4}
+      v = find(v, parent); // {5}
+
+      if (union(u, v, parent)) { // {6}
+        ne++;
+      }
+
+      cost[u][v] = cost[v][u] = INF; // {7}
+    }
+    return parent;
+  }
+
+  /**
+   * find函数， 方式 MST 出现环路
+   * @param {*} i 
+   * @param {*} parent 
+   */
+  var find = function(i, parent) {
+    while (parent[i]) {
+      i = parent[i];
+    }
+    return i;
+  }
+
+  var union = function(i, j, parent) {
+    if (i != j) {
+      parent[j] = i;
+      return true;
+    }
+    return false;
+  }
 }
 
 /**
