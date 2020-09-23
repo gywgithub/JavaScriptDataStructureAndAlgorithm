@@ -25,12 +25,12 @@ function ArrayList() {
   }
 
   var swap = function(array, index1, index2) {
-    // 1
+    // Method 1.
     // var aux = array[index1];
     // array[index1] = array[index2];
     // array[index2] = aux;
 
-    // 2 ES6(ECMAScript 2015) 增强的对象属性
+    // Method 2. ES6(ECMAScript 2015) 增强的对象属性
     [array[index1], array[index2]] = [array[index2], array[index1]];
   }
 
@@ -47,6 +47,86 @@ function ArrayList() {
       }
     }
   }
+
+  /**
+   * 选择排序算法是一种原址比较排序算法。思路是找到数据结构中的最小值并将其放置在第一位，接着找到第二小的值并将其放到第二位，以此类推。
+   */
+  this.selectionSort = function() {
+    var length = array.length, // {1}
+      indexMin;
+    for (var i = 0; i < length - 1; i++) { // {2}
+      indexMin = i; // {3}
+      for (var j = i; j < length; j++) { // {4}
+        if (array[indexMin] > array[j]) { // {5}
+          indexMin = j; // {6}
+        }
+      }
+      if (i !== indexMin) { // {7}
+        swap(array, i, indexMin);
+      }
+    }
+  }
+
+  /**
+   * 插入排序每次排一个数组项，以此方式构建最后的排序数组。排序小型数组时，此算法比选择排序和冒泡排序性能要好。
+   */
+  this.insertionSort = function() {
+    var length = array.length, // {1}
+      j, temp;
+    for (var i = 1; i < length; i++) { // {2}
+      j = i; // {3}
+      temp = array[i]; // {4}
+      while (j > 0 && array[j - 1] > temp) { // {5}
+        array[j] = array[j - 1]; // {6}
+        j--;
+      }
+      array[j] = temp; // {7}
+    }
+  }
+
+  /**
+   * 归并排序是一个可以被实际使用的排序算法。比冒泡排序，选择排序，插入排序算法性能要好。
+   * 归并排序是一种分治算法。其思想是将原始数组切分成较小的数组，直到每个小数组只有一个位置，接着将小数组归并成较大的数组，直到最后只有一个排序完毕的大数组。
+   */
+  this.mergeSort = function() {
+    array = mergeSortRec(array);
+  }
+
+  var mergeSortRec = function(array) {
+    var length = array.length;
+    if (length === 1) { // {1}
+      return array; // {2}
+    }
+    var mid = Math.floor(length / 2), // {3}  Math.floor() 返回一个小于或等与一个给定数字的最大整数。(向下取整)
+      left = array.slice(0, mid), // {4}
+      right = array.slice(mid, length); // {5}
+
+    return merge(mergeSortRec(left), mergeSortRec(right)); // {6}
+  }
+
+  var merge = function(left, right) {
+    var result = [], // {7}
+      il = 0,
+      ir = 0;
+
+    while(il < left.length && ir < right.length) { // {8}
+      if (left[il] < right[ir]) {
+        result.push(left[il++]); // {9}
+      } else {
+        result.push(right[ir++]); // {10}
+      }
+    }
+
+    while(il < left.length) { // {11}
+      result.push(left[il++]);
+    }
+
+    while(ir < right.length) { // {12}
+      result.push(right[ir++]);
+    }
+
+    return result; // {13}
+  }
 }
 
 
@@ -61,8 +141,54 @@ function createNonSortedArray(size) { // {6}
 
 var array = createNonSortedArray(5); // {7}
 console.log(array.toString()); // {8}
-// array.bubbleSort(); // {9}
-// console.log(array.toString()); // {10}
+array.bubbleSort(); // {9}
+console.log(array.toString()); // {10}
 
-array.modifiedBubbleSort();
-console.log(array.toString());
+console.log('---')
+var array2 = new ArrayList();
+
+array2.insert(8);
+array2.insert(9);
+array2.insert(1);
+array2.insert(3);
+array2.insert(7);
+
+array2.insert(4);
+array2.insert(5);
+array2.insert(2);
+array2.insert(6);
+array2.insert(10);
+
+console.log(array2.toString())
+
+array2.modifiedBubbleSort();
+console.log(array2.toString());
+
+console.log('---')
+
+// var arr3 = [8,9,1,3,7,4,5,2,6,10]
+// console.log(arr3.toString())
+// var len = arr3.length
+// for (var i = 0; i < len; i++) {
+//   for (var j = 0; j < len - 1 - i; j++) {
+//     if (arr3[j] > arr3[j + 1]) {
+//       [arr3[j], arr3[j + 1]] = [arr3[j + 1], arr3[j]]
+//     }
+//   }
+// }
+// console.log(arr3.toString())
+
+
+console.log('=== array4 ===')
+
+var array4 = createNonSortedArray(5);
+console.log(array4.toString());
+array4.selectionSort();
+console.log(array4.toString());
+
+console.log('=== array5 ===')
+
+var array5 = createNonSortedArray(8)
+console.log(array5.toString());
+array5.mergeSort();
+console.log(array5.toString());
