@@ -95,7 +95,7 @@ function ArrayList() {
   var mergeSortRec = function(array) {
     var length = array.length;
     if (length === 1) { // {1}
-      return array; // {2}
+      return array; //分zhi
     }
     var mid = Math.floor(length / 2), // {3}  Math.floor() 返回一个小于或等与一个给定数字的最大整数。(向下取整)
       left = array.slice(0, mid), // {4}
@@ -126,6 +126,48 @@ function ArrayList() {
     }
 
     return result; // {13}
+  }
+
+  /**
+   * 快速排序也是最常用的一种算法。
+   * 快速排序和归并排序一样，也使用分治的方法，将原是数组分为较小的数组（但它没有想归并排序那样把它们分割开）。
+   */
+  this.quickSrot = function() {
+    quick(array, 0, array.length - 1);
+  }
+
+  var quick = function(array, left, right) {
+    var index; // {1}
+    if (array.length > 1) { // {2}
+      index = partition(array, left, right); // {3}
+      if (left < index - 1) { // {4}
+        quick(array, left, index - 1); // {5}
+      }
+      if (index < right) { // {6}
+        quick(array, index, right); // {7}
+      }
+    }
+  }
+
+  var partition = function(array, left, right) {
+    var pivot = array[Math.floor((right + left) / 2)], // {8}
+      i = left, // {9}
+      j = right; // {10}
+    
+    while(i <= j) { // {11}
+      while (array[i] < pivot) { // {12}
+        i++;
+      }
+      while (array[j] > pivot) { // {13}
+        j--;
+      }
+      if (i <= j) { // {14}
+        swap(array, i, j); // {15}
+        i++;
+        j--;
+      }
+    }
+    return i; // {16}
   }
 }
 
@@ -192,3 +234,18 @@ var array5 = createNonSortedArray(8)
 console.log(array5.toString());
 array5.mergeSort();
 console.log(array5.toString());
+
+console.log('=== array6 ===')
+
+var array6 = new ArrayList();
+array6.insert(3)
+array6.insert(5)
+array6.insert(1)
+array6.insert(6)
+array6.insert(4)
+array6.insert(7)
+array6.insert(2)
+array6.insert(8)
+console.log(array6.toString())
+array6.quickSrot();
+console.log(array6.toString())
