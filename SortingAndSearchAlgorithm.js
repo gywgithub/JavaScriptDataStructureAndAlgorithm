@@ -132,7 +132,7 @@ function ArrayList() {
    * 快速排序也是最常用的一种算法。
    * 快速排序和归并排序一样，也使用分治的方法，将原是数组分为较小的数组（但它没有想归并排序那样把它们分割开）。
    */
-  this.quickSrot = function() {
+  this.quickSort = function() {
     quick(array, 0, array.length - 1);
   }
 
@@ -168,6 +168,46 @@ function ArrayList() {
       }
     }
     return i; // {16}
+  }
+
+  /**
+   * 堆排序也是一种高效的算法，因其把数组当做二叉树来排序而得名。
+   */
+  this.heapSort = function () {
+    var heapSize = array.length;
+    buildHeap(array); // {1}
+
+    while(heapSize > 1) {
+      heapSize--;
+      swap(array, 0, heapSize); // {2}
+      heapify(array, heapSize, 0); // {3}
+    }
+  }
+
+  var buildHeap = function(array) {
+    var heapSize = array.length;
+    for(var i = Math.floor(array.length / 2); i >= 0; i--) {
+      heapify(array, heapSize, i);
+    }
+  }
+
+  var heapify = function(array, heapSize, i) {
+    var left = i * 2 + 1,
+    right = i * 2 + 2,
+    largest = i;
+
+    if (left < heapSize && array[left] > array[largest]) {
+      largest = left;
+    }
+
+    if (right < heapSize && array[right] > array[largest]) {
+      largest = right;
+    }
+
+    if (largest !== i) {
+      swap(array, i, largest);
+      heapify(array, heapSize, largest);
+    }
   }
 }
 
@@ -247,5 +287,19 @@ array6.insert(7)
 array6.insert(2)
 array6.insert(8)
 console.log(array6.toString())
-array6.quickSrot();
+array6.quickSort();
 console.log(array6.toString())
+
+console.log('=== array7 ===')
+
+var array7 = new ArrayList();
+array7.insert(3)
+array7.insert(5)
+array7.insert(1)
+array7.insert(6)
+array7.insert(4)
+array7.insert(7)
+array7.insert(2)
+console.log(array7.toString())
+array7.heapSort()
+console.log(array7.toString())
