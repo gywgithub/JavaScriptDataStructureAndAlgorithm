@@ -209,6 +209,47 @@ function ArrayList() {
       heapify(array, heapSize, largest);
     }
   }
+
+  /**
+   * 顺序或线性搜索是最基本的搜索算法。它的机制是，将每一个数据结构中的元素和要找的元素做比较。顺序搜索是最低效的一种搜索算法。
+   */
+  this.sequentialSearch = function (item) {
+    for (var i = 0; i < array.length; i++) { // {1}
+      if (item === array[i]) { // {2}
+        return i; // {3}
+      }
+    }
+    return -1; // {4}
+  }
+
+  /**
+   * 二分搜索。
+   * 二分搜索算法要求被搜索的数据机构已排序。算法遵循的步骤如下：
+   * （1）选择数组的中间值
+   * （2）如果选中值是待搜索值，那么算法执行完毕（值找到了）。
+   * （3）如果待搜索的值比选中的值小，则返回步骤1并在选中值左边的子数组中寻找。
+   * （4）如果待搜索的值比选中的值大，则返回步骤1并在选中值右边的子数组中寻找。
+   */
+  this.binarySearch = function(item) {
+    this.quickSort(); // {1}
+
+    var low = 0, // {2}
+      high = array.length - 1, // {3}
+      mid, element;
+
+    while(low <= high) { // {4}
+      mid = Math.floor((low + high) / 2); // {5}
+      element = array[mid]; // {6}
+      if (element < item) { // {7}
+        low = mid + 1; // {8}
+      } else if (element > item) { // {9}
+        high = mid - 1; // {10}
+      } else {
+        return mid; // {11}
+      }
+    }
+    return -1; // {12}
+  }
 }
 
 
@@ -303,3 +344,29 @@ array7.insert(2)
 console.log(array7.toString())
 array7.heapSort()
 console.log(array7.toString())
+
+console.log('=== array8 ===')
+var array8 = createNonSortedArray(5)
+console.log(array8.toString())
+let index8 = array8.sequentialSearch(3)
+console.log(index8)
+
+
+console.log('=== array9 ===')
+
+var array9 = new ArrayList();
+array9.insert(3)
+array9.insert(5)
+array9.insert(1)
+array9.insert(6)
+array9.insert(4)
+
+array9.insert(7)
+array9.insert(2)
+array9.insert(10)
+array9.insert(9)
+array9.insert(8)
+console.log(array9.toString())
+var index9 = array9.binarySearch(9)
+console.log(array9.toString())
+console.log(index9)
