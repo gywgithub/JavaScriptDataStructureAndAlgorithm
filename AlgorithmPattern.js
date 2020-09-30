@@ -63,7 +63,7 @@ function MinCoinChange(coins) {
   var coins = coins; // {1}
   var cache = {}; // {2}
 
-  this.makeChange = function(amount) {
+  this.makeChange = function (amount) {
     var me = this;
     if (!amount) { // {3}
       return [];
@@ -71,7 +71,8 @@ function MinCoinChange(coins) {
     if (cache[amount]) { // {4}
       return cache[amount];
     }
-    var min = [], newMin, newAmount;
+    var min = [],
+      newMin, newAmount;
     for (var i = 0; i < coins.length; i++) { // {5}
       var coin = coins[i];
       newAmount = amount - coin; // {6}
@@ -81,10 +82,11 @@ function MinCoinChange(coins) {
       if (
         newAmount >= 0 && // {8}
         (newMin.length < min.length - 1 || !min.length) // {9}
-        && (newMin.length || !newAmount)) { // {10}
-          min = [coin].concat(newMin); // {11}
-          console.log('new Min ' + min + ' for ' + amount);
-        }
+        &&
+        (newMin.length || !newAmount)) { // {10}
+        min = [coin].concat(newMin); // {11}
+        console.log('new Min ' + min + ' for ' + amount);
+      }
     }
     return (cache[amount] = min); // {12}
   }
@@ -132,10 +134,11 @@ console.log(knapSack(capacity, weights, values, n)); // {7}
  * 附件函数用来找出解决方案的物品
  */
 function findValues(n, capacity, kS, weights, values) {
-  var i = n, k = capacity;
+  var i = n,
+    k = capacity;
   console.log('解决方案包含以下物品： ')
 
-  while(i > 0 && k > 0) {
+  while (i > 0 && k > 0) {
     if (kS[i][k] !== kS[i - 1][k]) {
       console.log('物品 ' + i + ' , 重量： ' + weights[i - 1] + ' ,价值： ' + values[i - 1]);
       i--;
@@ -153,9 +156,9 @@ console.log('---')
  */
 function lcs(wordX, wordY) {
   var m = wordX.length,
-  n = wordY.length,
-  l = [],
-  i, j, a, b;
+    n = wordY.length,
+    l = [],
+    i, j, a, b;
   // var solution = [];
 
   for (i = 0; i <= m; ++i) {
@@ -187,9 +190,11 @@ function lcs(wordX, wordY) {
 }
 
 function printSolution(solution, l, wordX, wordY, m, n) {
-  var a = m, b = n, i, j,
-  x = solution[a][b],
-  answer = '';
+  var a = m,
+    b = n,
+    i, j,
+    x = solution[a][b],
+    answer = '';
 
   while (x !== '0') {
     if (solution[a][b] === 'diagonal') {
@@ -208,3 +213,57 @@ function printSolution(solution, l, wordX, wordY, m, n) {
 
 let resLcs = lcs('acbaed', 'abcadf')
 console.log('res: ', resLcs)
+
+/**
+ * 矩阵链相乘是另一个可以用动态规划解决的著名问题。这个问题是要找出一组矩阵相乘的最佳方式（顺序）。
+ * n行m列的矩阵A和m行p列的矩阵B相乘，结果是n行p列的矩阵C。
+ */
+function matrixChainOrder(p, n) {
+  var i, j, k, l, q, m = [];
+
+  var s = [];
+  for (i = 0; i <= n; i++) {
+    s[i] = [];
+    for (j = 0; j <= n; j++) {
+      s[i][j] = 0;
+    }
+  }
+
+  for (i = 1; i <= n; i++) {
+    m[i] = [];
+    m[i][i] = 0;
+  }
+
+  for (l = 2; l < n; l++) {
+    for (i = 1; i <= n - l + 1; i++) {
+      j = i + l - 1;
+      m[i][j] = Number.MAX_SAFE_INTEGER;
+      for (k = i; k <= j - 1; k++) {
+        q = m[i][k] + m[k + 1][j] + p[i - 1] * p[k] * p[j]; // {1}
+        if (q < m[i][j]) {
+          m[i][j] = q;
+          // {2}
+          s[i][j] = k;
+        }
+      }
+    }
+  }
+  // {3}
+  printOptimalParenthesis(s, 1, n - 1);
+  return m[1][n - 1];
+}
+
+function printOptimalParenthesis(s, i, j) {
+  if (i == j) {
+    console.log("A[" + i + "]");
+  } else {
+    console.log("(");
+    printOptimalParenthesis(s, i, s[i][j]);
+    printOptimalParenthesis(s, s[i][j] + 1, j);
+    console.log(")");
+  }
+}
+
+var p = [10, 100, 5, 50, 1]
+n = p.length;
+console.log(matrixChainOrder(p, n))
