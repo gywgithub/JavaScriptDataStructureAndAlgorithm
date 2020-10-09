@@ -57,41 +57,61 @@ console.log('---')
 // 分而治之方法是把问题分解成相互独立的子问题，然后组合它们的答案，而动态规划是将问题拆分成相互依赖的子问题。
 
 /**
- * 最少硬币找零问题
+ * 动态规划算法 最少硬币找零问题 
+ */
+// function MinCoinChange(coins) {
+//   var coins = coins; // {1}
+//   var cache = {}; // {2}
+
+//   this.makeChange = function (amount) {
+//     var me = this;
+//     if (!amount) { // {3}
+//       return [];
+//     }
+//     if (cache[amount]) { // {4}
+//       return cache[amount];
+//     }
+//     var min = [],
+//       newMin, newAmount;
+//     for (var i = 0; i < coins.length; i++) { // {5}
+//       var coin = coins[i];
+//       newAmount = amount - coin; // {6}
+//       if (newAmount >= 0) {
+//         newMin = me.makeChange(newAmount); // {7}
+//       }
+//       if (
+//         newAmount >= 0 && // {8}
+//         (newMin.length < min.length - 1 || !min.length) // {9}
+//         &&
+//         (newMin.length || !newAmount)) { // {10}
+//         min = [coin].concat(newMin); // {11}
+//         console.log('new Min ' + min + ' for ' + amount);
+//       }
+//     }
+//     return (cache[amount] = min); // {12}
+//   }
+// }
+
+/**
+ * 贪心算法版本 最少硬币找零问题
+ * @param {*} coins 
  */
 function MinCoinChange(coins) {
   var coins = coins; // {1}
-  var cache = {}; // {2}
 
-  this.makeChange = function (amount) {
-    var me = this;
-    if (!amount) { // {3}
-      return [];
-    }
-    if (cache[amount]) { // {4}
-      return cache[amount];
-    }
-    var min = [],
-      newMin, newAmount;
-    for (var i = 0; i < coins.length; i++) { // {5}
+  this.makeChange = function(amount) {
+    var change = [],
+      total = 0;
+    for (var i = coins.length; i >= 0; i--) { // {2}
       var coin = coins[i];
-      newAmount = amount - coin; // {6}
-      if (newAmount >= 0) {
-        newMin = me.makeChange(newAmount); // {7}
-      }
-      if (
-        newAmount >= 0 && // {8}
-        (newMin.length < min.length - 1 || !min.length) // {9}
-        &&
-        (newMin.length || !newAmount)) { // {10}
-        min = [coin].concat(newMin); // {11}
-        console.log('new Min ' + min + ' for ' + amount);
+      while (total + coin <= amount) { // {3}
+        change.push(coin); // {4}
+        total += coin; // {5}
       }
     }
-    return (cache[amount] = min); // {12}
+    return change;
   }
 }
-
 
 var minCoinChange = new MinCoinChange([1, 5, 10, 25])
 console.log(minCoinChange.makeChange(36))
@@ -123,6 +143,30 @@ function knapSack(capacity, weights, values, n) {
   findValues(n, capacity, kS, weights, values)
   return kS[n][capacity]; // {6}
 }
+
+/**
+ * 分数背包问题
+ * @param {*} capacity 
+ * @param {*} values 
+ * @param {*} weights 
+ */
+// function knapSack(capacity,  values, weights) {
+//   var n = values.length,
+//   load = 0, i = 0, val = 0;
+
+//   for (i = 0; i < n && load < capacity; i++) { // {1}
+//     if (weights[i] <= (capacity - load)) { // {2}
+//       val += values[i];
+//       load += weights[i];
+//     } else {
+//       var r = (capacity - load) / weights[i]; // {3}
+//       val += r * values[i];
+//       load += weights[i];
+//     }
+//   }
+//   return w;
+// }
+
 
 var values = [3, 4, 5],
   weights = [2, 3, 4],
@@ -267,3 +311,27 @@ function printOptimalParenthesis(s, i, j) {
 var p = [10, 100, 5, 50, 1]
 n = p.length;
 console.log(matrixChainOrder(p, n))
+
+console.log('---')
+
+// 命令式编程，声明函数如下
+var printArray = function(array) {
+  for (var i = 0; i < array.length; i++) {
+    console.log(array[i])
+  }
+}
+printArray([1, 2, 3, 4, 5])
+
+
+// 函数式编程
+var forEach = function(array, action) {
+  for (var i = 0; i < array.length; i++) {
+    action(array[i])
+  }
+}
+
+var logItem = function(item) {
+  console.log(item);
+}
+
+forEach([1, 2, 3, 4, 5], logItem)
