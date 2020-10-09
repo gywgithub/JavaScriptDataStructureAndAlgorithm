@@ -314,7 +314,7 @@ console.log(matrixChainOrder(p, n))
 
 console.log('---')
 
-// 命令式编程，声明函数如下
+// 命令式编程，迭代数组
 var printArray = function(array) {
   for (var i = 0; i < array.length; i++) {
     console.log(array[i])
@@ -323,7 +323,7 @@ var printArray = function(array) {
 printArray([1, 2, 3, 4, 5])
 
 
-// 函数式编程
+// 函数式编程，迭代数组
 var forEach = function(array, action) {
   for (var i = 0; i < array.length; i++) {
     action(array[i])
@@ -335,3 +335,29 @@ var logItem = function(item) {
 }
 
 forEach([1, 2, 3, 4, 5], logItem)
+console.log('---')
+
+// 找出数组中的最小值。命令式编程
+var findMinArray = function(array) {
+  var minValue = array[0]
+  for (var i = 1; i < array.length; i++) {
+    if (minValue > array[i]) {
+      minValue = array[i]
+    }
+  }
+  return minValue
+}
+
+console.log(findMinArray([8, 6, 4, 5, 9]))
+console.log('---')
+
+// 找出数组中最小值。函数式编程 ES2015
+const min_ = function(array) {
+  return Math.min(...array)
+}
+console.log(min_([8, 6, 4, 5, 9]))
+console.log('---')
+
+// 找出数组中最小值。函数式变成 ES2015
+const min = arr => Math.min(...arr)
+console.log(min([8, 6, 4, 5, 9]))
