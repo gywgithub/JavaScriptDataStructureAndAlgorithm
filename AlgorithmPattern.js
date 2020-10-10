@@ -358,6 +358,96 @@ const min_ = function(array) {
 console.log(min_([8, 6, 4, 5, 9]))
 console.log('---')
 
-// 找出数组中最小值。函数式变成 ES2015
+// 找出数组中最小值。函数式编程，箭头函数实现
 const min = arr => Math.min(...arr)
 console.log(min([8, 6, 4, 5, 9]))
+
+console.log('---')
+
+var daysOfWeek = [
+  {name: 'Monday', value: 1},
+  {name: 'Tuesday', value: 2},
+  {name: 'Wednesday', value: 7}
+]
+
+var daysOfWeekValues_ = []
+for (var i = 0; i < daysOfWeek.length; i++) {
+  daysOfWeekValues_.push(daysOfWeek[i].value)
+}
+console.log(daysOfWeekValues_)
+console.log('---')
+
+var daysOfWeekValues = daysOfWeek.map(function(day) {
+  return day.value;
+})
+console.log(daysOfWeekValues)
+console.log('---')
+
+var positiveNumbers_ = function (array) {
+  var positive = [];
+  for (var i = 0; i < array.length; i++) {
+    if (array[i] >= 0) {
+      positive.push(array[i])
+    }
+  }
+  return positive
+}
+console.log(positiveNumbers_([-1, 1, 2, -2]))
+console.log('---')
+
+var positiveNumbers = function(array) {
+  return array.filter(function(num) {
+    return num > 0
+  })
+}
+console.log(positiveNumbers([-1, 1, 2, -2]))
+console.log('---')
+
+var sumValues = function(array) {
+  var total = array[0]
+  for (var i = 1; i < array.length; i++) {
+    total += array[i]
+  }
+  return total
+}
+
+console.log(sumValues([1, 2, 3, 4, 5]))
+console.log('---')
+
+var sum_ = function(array) {
+  return array.reduce(function(a, b, i, arr) {
+    console.log('a: ' + a + ' b: ' + b + ' i: ' + i + ' arr: ' + arr)
+    return a + b
+  })
+}
+console.log(sum_([1, 2, 3, 4, 5]))
+console.log('---')
+
+const sum = arr => arr.reduce((a, b) => a + b)
+console.log(sum([1, 2, 3, 4, 5]))
+console.log('---')
+
+var mergeArrays_ = function (arrays) {
+  var count = arrays.length,
+  newArray = [],
+  k = 0;
+  for (var i = 0; i < count; i++) {
+    for (var j = 0; j < arrays[i].length; j++) {
+      newArray[k++] = arrays[i][j]
+    }
+  }
+  return newArray;
+}
+console.log(mergeArrays_([[1, 2, 3], [4, 5], [6]]))
+console.log('---')
+
+var mergeArraysConcat = function (arrays) {
+  return arrays.reduce(function(p, n) {
+    return p.concat(n)
+  })
+}
+console.log(mergeArraysConcat([[1, 2, 3], [4, 5], [6]]))
+console.log('---')
+
+const mergeArrays = (...arrays) => [].concat(...arrays)
+console.log(mergeArrays([1, 2, 3], [4, 5], [6]))
